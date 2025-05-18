@@ -5,57 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>몬티홀 게임 (10문)</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 20px;
-      background-color: #f2f2f2;
-    }
-    h1 {
-      margin-bottom: 20px;
-    }
-    #doors {
-      display: grid;
-      grid-template-columns: repeat(5, 80px);
-      grid-gap: 10px;
-      justify-content: center;
-    }
+    body { font-family: Arial, sans-serif; text-align: center; padding: 20px; background-color: #f2f2f2; }
+    h1 { margin-bottom: 20px; }
+    #doors { display: grid; grid-template-columns: repeat(5, 80px); grid-gap: 10px; justify-content: center; }
     .door {
-      width: 80px;
-      height: 120px;
+      width: 80px; height: 120px;
       background-image: url('door.png');
       background-size: cover;
       border: 3px solid black;
       border-radius: 6px;
       cursor: pointer;
     }
-    .disabled {
-      pointer-events: none;
-      opacity: 0.5;
-    }
-    .goat {
-      background-image: url('goat.png');
-    }
-    .car {
-      background-image: url('car.png');
-    }
-    .green {
-      border-color: green !important;
-    }
-    .red {
-      border-color: red !important;
-    }
-    #status, #stats {
-      margin-top: 20px;
-    }
+    .disabled { pointer-events: none; opacity: 0.5; }
+    .goat { background-image: url('goat.png'); }
+    .car { background-image: url('car.png'); }
+    .green { border-color: green !important; }
+    .red { border-color: red !important; }
+    #status, #stats { margin-top: 20px; }
   </style>
+  <audio id="bgm" src="game-music-loop.mp3" loop autoplay></audio>
+  <audio id="success-sound" src="success.mp3"></audio>
+  <audio id="fail-sound" src="fail.mp3"></audio>
 </head>
 <body>
   <h1>🚪 몬티홀 게임 (10문)</h1>
   <div id="status">10개의 문 중 하나를 선택하세요!</div>
   <div id="doors"></div>
   <div id="stats"></div>
-
   <script>
     const NUM_DOORS = 10;
     let carDoor, playerChoice, revealedDoor, finalChoice;
@@ -87,15 +63,12 @@
 
     function onClick(event) {
       const index = parseInt(event.target.dataset.index);
-
       if (state === 'select') {
         playerChoice = index;
         highlightChoice(index);
-
         const others = [...Array(NUM_DOORS).keys()].filter(i => i !== index && i !== carDoor);
         revealedDoor = others[Math.floor(Math.random() * others.length)];
         revealGoat(revealedDoor);
-
         const swap = confirm(`사회자가 문 ${revealedDoor}을 열었습니다 (염소🐐)\n선택을 바꾸시겠습니까?`);
         if (swap) {
           statusDiv.textContent = '바꿀 문을 클릭해서 선택하세요!';
@@ -134,14 +107,12 @@
           door.classList.add(success ? 'green' : 'red');
         }
       });
-
+      document.getElementById(success ? 'success-sound' : 'fail-sound').play();
       statusDiv.textContent = success
         ? '🎉 축하합니다! 자동차🚗를 얻었습니다!'
-        : '😢 아쉽네요. 염소🐐를 선택했습니다.';
-
+        : '😢 아쉽네요. 염소🐐를 선택했습니다!';
       if (finalChoice !== playerChoice) switchWins += success ? 1 : 0;
       else stayWins += success ? 1 : 0;
-
       updateStats();
       setTimeout(setupGame, 4000);
     }
