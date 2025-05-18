@@ -69,7 +69,8 @@
         const others = [...Array(NUM_DOORS).keys()].filter(i => i !== index && i !== carDoor);
         revealedDoor = others[Math.floor(Math.random() * others.length)];
         revealGoat(revealedDoor);
-        const swap = confirm(`사회자가 문 ${revealedDoor}을 열었습니다 (염소🐐)\n선택을 바꾸시겠습니까?`);
+        const swap = confirm(`사회자가 문 ${revealedDoor}을 열었습니다 (염소🐐)
+선택을 바꾸시겠습니까?`);
         if (swap) {
           statusDiv.textContent = '바꿀 문을 클릭해서 선택하세요!';
           state = 'switch';
